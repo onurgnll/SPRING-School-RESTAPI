@@ -1,5 +1,6 @@
 package com.school.schoolproject.rest;
 
+import com.school.schoolproject.exceptions.TeacherNotFoundEx;
 import com.school.schoolproject.requests.CreateTeacherReq;
 import com.school.schoolproject.responses.ResponseHandler;
 import com.school.schoolproject.service.TeacherService;
@@ -46,8 +47,14 @@ public class TeacherController {
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteTeacher(@PathVariable int id){
-        teacherService.deleteById(id);
-        return ResponseHandler.generateResponse(200);
+        try {
+            teacherService.deleteById(id);
+            return ResponseHandler.generateResponse(200);
+
+        }catch (Exception e){
+            return ResponseHandler.generateResponse(500, e.getMessage());
+        }
+
     }
 
 
@@ -56,7 +63,10 @@ public class TeacherController {
         try {
             return ResponseHandler.generateResponse(200, teacherService.findOneById(id));
 
-        }catch (Exception e){
+        }catch (TeacherNotFoundEx ex){
+            return ResponseHandler.generateResponse(404, ex.getMessage());
+        }
+        catch (Exception e){
             return ResponseHandler.generateResponse(500, e.getMessage());
         }
     }

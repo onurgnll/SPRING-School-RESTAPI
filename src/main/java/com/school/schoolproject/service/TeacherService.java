@@ -1,6 +1,7 @@
 package com.school.schoolproject.service;
 
 import com.school.schoolproject.entity.Teacher;
+import com.school.schoolproject.exceptions.TeacherNotFoundEx;
 import com.school.schoolproject.matcher.RegexMatcher;
 import com.school.schoolproject.repositories.TeacherRepository;
 import com.school.schoolproject.requests.CreateTeacherReq;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 @Service
 public class TeacherService {
@@ -33,7 +33,7 @@ public class TeacherService {
         if(optional.isPresent()){
             teacher = (Teacher) optional.get();
         }else{
-            throw  new RuntimeException("user Not found");
+            throw  new TeacherNotFoundEx("Teacher Not Found");
         }
         return teacher;
     }
@@ -61,6 +61,9 @@ public class TeacherService {
 
     public Teacher updateTeacher(CreateTeacherReq createTeacherReq, int id) {
 
+        if(!RegexMatcher.matchEmail(createTeacherReq.getEmail())){
+            throw new RuntimeException("Provide a valid email");
+        }
         Teacher teacher = findOneById(id);
 
         teacher.setName(createTeacherReq.getName());
