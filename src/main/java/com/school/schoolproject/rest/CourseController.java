@@ -20,39 +20,33 @@ public class CourseController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getAllCourses(){
-        return ResponseHandler.generateResponse(200, courseService.findAll() );
+    public ResponseEntity<Object> getAllCourses() {
+        return ResponseHandler.generateResponse(200, courseService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getCourseById(@PathVariable int id){
+    public ResponseEntity<Object> getCourseById(@PathVariable int id) {
         return ResponseHandler.generateResponse(200, courseService.findById(id));
     }
 
 
     @PostMapping
-    public ResponseEntity<Object> createCourse(@RequestBody CreateCourseReq createCourseReq){
-        return ResponseHandler.generateResponse(200 , courseService.createCourse(createCourseReq));
+    public ResponseEntity<Object> createCourse(@RequestBody CreateCourseReq createCourseReq) {
+        return ResponseHandler.generateResponse(200, courseService.createCourse(createCourseReq));
     }
 
 
     @PostMapping("/add")
-    public ResponseEntity<Object> addStudentToCourse(@RequestBody AddStudentToCourseReq addStudentToCourseReq){
+    public ResponseEntity<Object> addStudentToCourse(@RequestBody AddStudentToCourseReq addStudentToCourseReq) {
 
-        try {
+        Course course = courseService.addStudentToCourse(addStudentToCourseReq);
 
-            Course course = courseService.addStudentToCourse(addStudentToCourseReq);
-
-            return ResponseHandler.generateResponse(200 , course);
-        }
-        catch (Exception e){
-            return  ResponseHandler.generateResponse(500, e.getMessage());
-        }
+        return ResponseHandler.generateResponse(200, course);
     }
 
     @GetMapping("/{id}/students")
-    public ResponseEntity<Object> getAllStudents(@PathVariable int id){
-        return ResponseHandler.generateResponse(200 ,courseService.findAllStudentsById(id));
+    public ResponseEntity<Object> getAllStudents(@PathVariable int id) {
+        return ResponseHandler.generateResponse(200, courseService.findAllStudentsById(id));
     }
 
 

@@ -17,49 +17,34 @@ public class ClassController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getAllClass(){
+    public ResponseEntity<Object> getAllClass() {
         return ResponseHandler.generateResponse(200, classService.findAll());
     }
 
     @PostMapping
-    public ResponseEntity<Object> createClass(@RequestBody Class clas){
-        try {
+    public ResponseEntity<Object> createClass(@RequestBody Class clas) {
 
-            Class classs = classService.save(clas);
+        Class classs = classService.save(clas);
 
-            return ResponseHandler.generateResponse(200, classs);
+        return ResponseHandler.generateResponse(200, classs);
 
-
-        }catch (Exception e){
-            return ResponseHandler.generateResponse(500, e.getMessage());
-        }
     }
 
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> findClassById(@PathVariable int id) {
 
-        try {
-            return ResponseHandler.generateResponse(200, classService.findById(id));
+        return ResponseHandler.generateResponse(200, classService.findById(id));
 
-        }catch (Exception e){
-            return ResponseHandler.generateResponse(500, e.getMessage());
-        }
 
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteClassById(@PathVariable int id){
+    public ResponseEntity<Object> deleteClassById(@PathVariable int id) {
 
-        try {
-            classService.deleteById(id);
+        classService.deleteById(id);
 
-            return ResponseHandler.generateResponse(200);
-
-        }catch (Exception e){
-
-            return ResponseHandler.generateResponse(500, e.getMessage());
-        }
+        return ResponseHandler.generateResponse(200);
 
 
     }

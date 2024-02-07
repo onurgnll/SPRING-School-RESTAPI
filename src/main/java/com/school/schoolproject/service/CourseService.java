@@ -4,7 +4,7 @@ import com.school.schoolproject.entity.Class;
 import com.school.schoolproject.entity.Course;
 import com.school.schoolproject.entity.Student;
 import com.school.schoolproject.entity.Teacher;
-import com.school.schoolproject.exceptions.CourseNotFoundEx;
+import com.school.schoolproject.exceptions.NotFoundException;
 import com.school.schoolproject.repositories.CourseRepository;
 import com.school.schoolproject.requests.AddStudentToCourseReq;
 import com.school.schoolproject.requests.CreateCourseReq;
@@ -23,7 +23,9 @@ public class CourseService {
     StudentService studentService;
 
     @Autowired
-    public void setStudentService(StudentService studentService){this.studentService = studentService;}
+    public void setStudentService(StudentService studentService) {
+        this.studentService = studentService;
+    }
 
     @Autowired
     public void setTeacherService(TeacherService teacherService) {
@@ -36,17 +38,17 @@ public class CourseService {
         this.classService = classService;
     }
 
-    public List<Course> findAll(){
+    public List<Course> findAll() {
 
         return courseRepository.findAll();
     }
 
-    public Course findById(int id){
-        return courseRepository.findById(id).orElseThrow(()->new CourseNotFoundEx("Course Not Found"));
+    public Course findById(int id) {
+        return courseRepository.findById(id).orElseThrow(() -> new NotFoundException("Course Not Found"));
     }
 
     @Transactional
-    public void deleteById(int id){
+    public void deleteById(int id) {
         Course course = findById(id);
 
         courseRepository.deleteById(id);
@@ -54,14 +56,14 @@ public class CourseService {
     }
 
     @Transactional
-    public Course save(Course course){
+    public Course save(Course course) {
         return courseRepository.save(course);
     }
 
     @Transactional
-    public Course createCourse(CreateCourseReq createCourseReq){
+    public Course createCourse(CreateCourseReq createCourseReq) {
 
-        Teacher teacher = teacherService.findOneById(createCourseReq.getTeacherId()) ;
+        Teacher teacher = teacherService.findOneById(createCourseReq.getTeacherId());
         Class aclass = classService.findById(createCourseReq.getClassId());
 
         Course course = new Course();
@@ -86,13 +88,13 @@ public class CourseService {
         Course course = findById(addStudentToCourseReq.getCourseId());
 
         course.getStudents().add(student);
-        //System.out.println(course);
 
-        return  save(course);
+        return save(course);
 
     }
 
     public List<Student> findAllStudentsById(int id) {
-        return courseRepository.findStudentsById(id);
+
+        return courseRepository.findStudentsById(findById(id).getId());
     }
 }

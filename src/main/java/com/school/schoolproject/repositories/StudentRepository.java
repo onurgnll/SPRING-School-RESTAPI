@@ -13,4 +13,6 @@ public interface StudentRepository extends JpaRepository<Student , Integer> {
 
     @Query("SELECT DISTINCT c FROM Student s JOIN s.courses c WHERE s.id = :id")
     List<Course> findCoursesByStudentId(int id);
+
+    Student findByEmail(String email);
 }

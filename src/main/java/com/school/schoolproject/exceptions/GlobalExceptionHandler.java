@@ -8,7 +8,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler({RuntimeException.class})
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleGeneralException(Exception exception) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler
     public ResponseEntity<Object> handleRuntimeException(RuntimeException exception) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -17,15 +25,15 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler
-    public ResponseEntity<Object> handleTeacherNotFoundEx(TeacherNotFoundEx teacherNotFoundEx){
-        return ResponseHandler.generateResponse(404, teacherNotFoundEx.getMessage());
+    public ResponseEntity<Object> handleNotFoundEx(NotFoundException notFoundException){
+        return ResponseHandler.generateResponse(404, notFoundException.getMessage());
     }
     @ExceptionHandler
-    public ResponseEntity<Object> handleStudentNotFound(StudentNotFoundEx studentNotFoundEx){
-        return ResponseHandler.generateResponse(404, studentNotFoundEx.getMessage());
+    public ResponseEntity<Object> handleNotValidEx(NotValidException notValidException){
+        return ResponseHandler.generateResponse(400, notValidException.getMessage());
     }
     @ExceptionHandler
-    public ResponseEntity<Object> handleCourseNotFound(CourseNotFoundEx courseNotFoundEx){
-        return ResponseHandler.generateResponse(404, courseNotFoundEx.getMessage());
+    public ResponseEntity<Object> handleAlreadyExist(AlreadyExistException alreadyExistException){
+        return ResponseHandler.generateResponse(409, alreadyExistException.getMessage());
     }
 }

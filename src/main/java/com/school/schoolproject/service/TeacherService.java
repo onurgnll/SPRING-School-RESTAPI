@@ -2,7 +2,9 @@ package com.school.schoolproject.service;
 
 import com.school.schoolproject.entity.Course;
 import com.school.schoolproject.entity.Teacher;
-import com.school.schoolproject.exceptions.TeacherNotFoundEx;
+import com.school.schoolproject.exceptions.AlreadyExistException;
+import com.school.schoolproject.exceptions.NotFoundException;
+import com.school.schoolproject.exceptions.NotValidException;
 import com.school.schoolproject.matcher.RegexMatcher;
 import com.school.schoolproject.repositories.TeacherRepository;
 import com.school.schoolproject.requests.CreateTeacherReq;
@@ -26,31 +28,35 @@ public class TeacherService {
         this.teacherRepository = teacherRepository;
     }
 
-    public List<Teacher> findAll(){
+    public List<Teacher> findAll() {
         return teacherRepository.findAll();
     }
 
-    public Teacher save(Teacher teacher){
+    public Teacher save(Teacher teacher) {
         return teacherRepository.save(teacher);
     }
 
-    public Teacher findOneById(int id){
-        Teacher teacher = teacherRepository.findById(id).orElseThrow(()-> new TeacherNotFoundEx("Teacher Not Found"));
+    public Teacher findOneById(int id) {
+        Teacher teacher = teacherRepository.findById(id).orElseThrow(() -> new NotFoundException("Teacher Not Found"));
         return teacher;
     }
 
 
-    public void deleteById(int id){
+    public void deleteById(int id) {
+
+        findOneById(id);
         teacherRepository.deleteById(id);
     }
-
 
 
     public Teacher createTeacher(CreateTeacherReq createTeacherReq) {
         boolean isValidEmail = RegexMatcher.matchEmail(createTeacherReq.getEmail());
 
-        if(!isValidEmail){
-            throw new RuntimeException("Provide a valid email");
+        if (!isValidEmail) {
+            throw new NotValidException("Geçerli bir email yazın.");
+        }
+        if (null != teacherRepository.findByEmail(createTeacherReq.getEmail())) {
+            throw new AlreadyExistException("Böyle emaile sahip öğretmen zaten bulunuyor!");
         }
         Teacher teacher = new Teacher();
         teacher.setEmail(createTeacherReq.getEmail());
@@ -62,8 +68,8 @@ public class TeacherService {
 
     public Teacher updateTeacher(CreateTeacherReq createTeacherReq, int id) {
 
-        if(!RegexMatcher.matchEmail(createTeacherReq.getEmail())){
-            throw new RuntimeException("Provide a valid email");
+        if (!RegexMatcher.matchEmail(createTeacherReq.getEmail())) {
+            throw new NotValidException("Geçerli bir email yazın.");
         }
         Teacher teacher = findOneById(id);
 
@@ -75,9 +81,8 @@ public class TeacherService {
     }
 
 
-
-    public List<Course> findCoursesById(int id){
-        return courseService.findAllByTeacherId(id);
+    public List<Course> findCoursesById(int id) {
+        return courseService.findAllByTeacherId(findOneById(id).getId());
     }
 
 

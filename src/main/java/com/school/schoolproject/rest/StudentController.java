@@ -24,11 +24,7 @@ public class StudentController {
 
     @PostMapping
     public ResponseEntity<Object> createStudent(@RequestBody CreateStudentReq createStudentReq){
-        try {
             return ResponseHandler.generateResponse(200, studentService.createStudent(createStudentReq));
-        }catch (Exception ex){
-            return ResponseHandler.generateResponse(500 , ex.getMessage());
-        }
     }
 
     @GetMapping("/{id}")
