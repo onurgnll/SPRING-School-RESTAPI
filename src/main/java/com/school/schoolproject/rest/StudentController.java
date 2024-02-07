@@ -43,5 +43,12 @@ public class StudentController {
         return ResponseHandler.generateResponse(200 );
     }
 
+    @GetMapping("/{id}/courses")
+    public ResponseEntity<Object> getCoursesByStudentId(@PathVariable int id){
+
+        return ResponseHandler.generateResponse(200, studentService.findAllCoursesByStudentId(id));
+
+    }
+
 
 }

@@ -71,4 +71,15 @@ public class TeacherController {
         }
     }
 
+
+    @GetMapping("/{id}/courses")
+    public ResponseEntity<Object> findCoursesByTeacherId(@PathVariable int id){
+        try {
+            return ResponseHandler.generateResponse(200, teacherService.findCoursesById(id));
+
+        }
+        catch (Exception e){
+            return ResponseHandler.generateResponse(500, e.getMessage());
+        }
+    }
 }

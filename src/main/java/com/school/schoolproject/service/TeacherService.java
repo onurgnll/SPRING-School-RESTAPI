@@ -1,23 +1,30 @@
 package com.school.schoolproject.service;
 
+import com.school.schoolproject.entity.Course;
 import com.school.schoolproject.entity.Teacher;
 import com.school.schoolproject.exceptions.TeacherNotFoundEx;
 import com.school.schoolproject.matcher.RegexMatcher;
 import com.school.schoolproject.repositories.TeacherRepository;
 import com.school.schoolproject.requests.CreateTeacherReq;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TeacherService {
     TeacherRepository teacherRepository;
+    CourseService courseService;
 
+    @Autowired
+    public void setCourseService(CourseService courseService) {
+        this.courseService = courseService;
+    }
+
+    @Autowired
     public TeacherService(TeacherRepository teacherRepository) {
         this.teacherRepository = teacherRepository;
     }
-
 
     public List<Teacher> findAll(){
         return teacherRepository.findAll();
@@ -28,13 +35,7 @@ public class TeacherService {
     }
 
     public Teacher findOneById(int id){
-        Teacher teacher = null;
-        Optional optional = teacherRepository.findById(id);
-        if(optional.isPresent()){
-            teacher = (Teacher) optional.get();
-        }else{
-            throw  new TeacherNotFoundEx("Teacher Not Found");
-        }
+        Teacher teacher = teacherRepository.findById(id).orElseThrow(()-> new TeacherNotFoundEx("Teacher Not Found"));
         return teacher;
     }
 
@@ -72,4 +73,12 @@ public class TeacherService {
         return save(teacher);
 
     }
+
+
+
+    public List<Course> findCoursesById(int id){
+        return courseService.findAllByTeacherId(id);
+    }
+
+
 }

@@ -17,7 +17,15 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler
+    public ResponseEntity<Object> handleTeacherNotFoundEx(TeacherNotFoundEx teacherNotFoundEx){
+        return ResponseHandler.generateResponse(404, teacherNotFoundEx.getMessage());
+    }
+    @ExceptionHandler
     public ResponseEntity<Object> handleStudentNotFound(StudentNotFoundEx studentNotFoundEx){
         return ResponseHandler.generateResponse(404, studentNotFoundEx.getMessage());
+    }
+    @ExceptionHandler
+    public ResponseEntity<Object> handleCourseNotFound(CourseNotFoundEx courseNotFoundEx){
+        return ResponseHandler.generateResponse(404, courseNotFoundEx.getMessage());
     }
 }

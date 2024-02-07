@@ -6,7 +6,4 @@ public class TeacherNotFoundEx extends RuntimeException{
         super(message);
     }
 
-    public TeacherNotFoundEx(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

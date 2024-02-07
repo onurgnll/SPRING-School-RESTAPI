@@ -1,5 +1,6 @@
 package com.school.schoolproject.service;
 
+import com.school.schoolproject.entity.Course;
 import com.school.schoolproject.entity.Student;
 import com.school.schoolproject.exceptions.StudentNotFoundEx;
 import com.school.schoolproject.matcher.RegexMatcher;
@@ -56,4 +57,11 @@ public class StudentService {
 
 
     }
+    public List<Course> findAllCoursesByStudentId(int id){
+
+        return studentRepository.findCoursesByStudentId(id);
+
+
+    }
+
 }

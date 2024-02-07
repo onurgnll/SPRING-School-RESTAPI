@@ -1,8 +1,11 @@
 package com.school.schoolproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -21,6 +24,10 @@ public class Teacher {
     @Column(name = "email")
     private String email;
 
+
+    @OneToMany(mappedBy = "teacher" , cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Course> courses;
 
 
 
